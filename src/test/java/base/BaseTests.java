@@ -1,41 +1,30 @@
-package org.base;
+package base;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-import java.util.List;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import pages.HomePage;
 
 public class BaseTests {
     private WebDriver driver;
+    protected HomePage homePage;
 
-    public static void main(String[] args) {
-        BaseTests test = new BaseTests();
-        test.setUp();
-    }
+    @BeforeClass
     public void setUp(){
+
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
         System.setProperty("webdrider.chrome.driver", "resources/chromedriver");
         driver = new ChromeDriver();
         driver.get("https://the-internet.herokuapp.com/");
-
-        List<WebElement> links = driver.findElements(By.tagName("a"));
-        System.out.println(links.size());
-
-        //WebElement inputsLink = driver.findElement(By.linkText("Inputs"));
-        //inputsLink.click();
-        WebElement shiftingContent = driver.findElement(By.linkText("Shifting Content"));
-        shiftingContent.click();
-        WebElement example1 = driver.findElement(By.linkText("Example 1: Menu Element"));
-        example1.click();
-        List<WebElement> linkWithinEx1 = driver.findElements(By.tagName("a"));
-        System.out.println(linkWithinEx1.size());
+        homePage = new HomePage(driver);
 
         driver.manage().window().maximize();
-
-        System.out.println(driver.getTitle());
-
-        //driver.quit();
+    }
+    @AfterClass
+    public void tearDown(){
+        driver.quit();
     }
 
 }
